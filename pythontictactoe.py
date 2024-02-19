@@ -1,8 +1,19 @@
 import itertools
+from colorama import Fore, Back, Style, init 
+
+init()
 
 def win(current_game):
-
+        '''
+        Checks to all ways a user can win
+        Horizonal, Vertical or Diagonal 
+        if no one wins returns False
+        '''
         def all_same(l):
+                ''' 
+        A function that checks to see if a player has won.
+        "l" is used as a placeholder for either "row", "check" or "diags". 
+        '''
                 if l.count(l[0]) == len(l) and l[0] != 0:
                         return True 
                 else:
@@ -17,7 +28,6 @@ def win(current_game):
         # | Vertically
         for col in range(len(game[0])):
                 check = []
-
                 for row in game:    
                         check.append(row[col])
                 if all_same(check):
@@ -54,7 +64,16 @@ def game_board(game_map, player=0, row=0, column=0, just_display=False):
                 if not just_display:
                         game_map[row][column] = player
                 for count, row in enumerate(game_map):
-                        print(count, row)
+                        colored_row = ""
+                        for item in row:
+                                if item == 0:
+                                        colored_row += "   "
+                                elif item == 1:
+                                        colored_row += Fore.GREEN + ' X ' + Style.RESET_ALL
+                                elif item == 2:
+                                        colored_row += Fore.RED + ' O ' + Style.RESET_ALL
+                        print(count, colored_row)
+
                 return game_map, True 
 
         except IndexError as e:
@@ -67,7 +86,8 @@ def game_board(game_map, player=0, row=0, column=0, just_display=False):
 play = True
 players = [1, 2]
 while play:
-        game_size = int(input("What size game of tic tac toe? "))
+        game_size = int(input("What size game of tic tac toe do you want to play? "))
+        # Dynamically change the size of the game. 
         game = [[0 for i in range(game_size)] for i in range(game_size)]
         game_won = False
         player_cycle = itertools.cycle([1, 2]) # Cycles between player 1 and 2 / alternates between the two
